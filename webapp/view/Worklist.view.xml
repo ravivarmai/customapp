@@ -1,0 +1,96 @@
+<mvc:View controllerName="com.autodesk.zutlity_analyzer.controller.Worklist" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:semantic="sap.f.semantic" xmlns:layout="sap.ui.layout" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+	xmlns:viz.data="sap.viz.ui5.data" xmlns:mc="sap.suite.ui.microchart">
+	<semantic:SemanticPage id="page" headerPinnable="false" toggleHeaderOnTitleClick="false">
+		<semantic:titleHeading>
+			<Title text="{i18n>worklistTitle}" level="H2"/>
+		</semantic:titleHeading>
+		<semantic:content>
+			<!--<layout:FixFlex>-->
+			<!--	<layout:flexContent>-->
+			<!--		<viz:Popover id="idPopOver"></viz:Popover>-->
+			<!--		<viz:VizFrame id="idVizFrame" uiConfig="{applicationSet:'fiori'}" height='100%' width="100%" vizType='stacked_bar'>-->
+			<!--			<viz:dataset>-->
+			<!--				<viz.data:FlattenedDataset data="{/milk}">-->
+			<!--					<viz.data:dimensions>-->
+			<!--						<viz.data:DimensionDefinition name="Store Name" value="{Store Name}"/>-->
+			<!--						<viz.data:DimensionDefinition name="Fat Percentage" value="{Fat Percentage}"/>-->
+			<!--					</viz.data:dimensions>-->
+			<!--					<viz.data:measures>-->
+			<!--						<viz.data:MeasureDefinition name="Revenue" value="{Revenue}"/>-->
+			<!--					</viz.data:measures>-->
+			<!--				</viz.data:FlattenedDataset>-->
+			<!--			</viz:dataset>-->
+			<!--			<viz:feeds>-->
+			<!--				<viz.feeds:FeedItem uid="valueAxis" type="Measure" values="Revenue"/>-->
+			<!--				<viz.feeds:FeedItem uid="categoryAxis" type="Dimension" values="Store Name"/>-->
+			<!--				<viz.feeds:FeedItem uid="color" type="Dimension" values="Fat Percentage"/>-->
+			<!--			</viz:feeds>-->
+			<!--		</viz:VizFrame>-->
+			<!--	</layout:flexContent>-->
+			<!--</layout:FixFlex>-->
+			<layout:Grid defaultSpan="XL6 L6 M6 S12">
+				<FlexBox alignItems="Center" class="sapUiSmallMargin">
+					<items>
+						<mc:InteractiveBarChart displayedBars="500" labelWidth="50%" selectionChanged="chartSelectionChanged" press="press" bars="{/}">
+							<mc:bars>
+								<mc:InteractiveBarChartBar label="{value}" value="{count}"/>
+							</mc:bars>
+						</mc:InteractiveBarChart>
+					</items>
+				</FlexBox>
+			</layout:Grid>
+			<Table id="table" visible="true" width="auto" items="{ path: '/', sorter: { path: 'user', descending: false } }"
+				noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+				updateFinished=".onUpdateFinished">
+				<headerToolbar>
+					<OverflowToolbar>
+						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
+						<ToolbarSpacer/>
+						<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search=".onSearch">
+							<layoutData>
+								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+							</layoutData>
+						</SearchField>
+						<Button press="onDataExport" text="Excel"/>
+					</OverflowToolbar>
+				</headerToolbar>
+				<columns>
+					<Column id="nameColumn">
+						<Text text="User" id="nameColumnTitle"/>
+					</Column>
+					<Column >
+						<Text text="Full Name"/>
+					</Column>
+					<Column >
+						<Text text="title"/>
+					</Column>
+					<Column >
+						<Text text="Url"/>
+					</Column>
+					<Column >
+						<Text text="App Type"/>
+					</Column>
+					<Column >
+						<Text text="Date"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem type="Navigation" press=".onPress">
+						<cells>
+							<ObjectIdentifier title="{user}"/>
+							<Text text="{FullName}"/>
+							<Text text="{title}"/>
+							<Text text="{Url}"/>
+							<Text text="{appType}"/>
+							<Text text="{timestamp}"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</semantic:content>
+		<semantic:sendEmailAction>
+			<semantic:SendEmailAction id="shareEmail" press=".onShareEmailPress"/>
+		</semantic:sendEmailAction>
+	</semantic:SemanticPage>
+</mvc:View>
